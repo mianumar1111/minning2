@@ -2,11 +2,23 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const MinningModel = require("./model/model");
-const session = require('express-session')
+const session = require("express-session");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 app.use(express.json());
-app.use(cors("*"));
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
+app.use(cookieParser());
+
+const secretKey = "abc@123&567";
 
 mongoose
   .connect(
@@ -47,6 +59,8 @@ app.post("/login", (req, res) => {
   MinningModel.findOne({ email: email }).then((user) => {
     if (user) {
       if (user.password === password) {
+        const token = jwt.sign({ ...user }, secretKey, { expiresIn: "1h" });
+        res.cookie("token", token);
         res.json(user);
       } else {
         res.json("Password Incorrect");
@@ -66,9 +80,27 @@ app.put("/updateScore", async (req, res) => {
   );
 
   if (updatedUser) {
-    res.json({ message: "Score updated successfully", user: updatedUser });
+    res.json({
+      message: "Score updated successfully",
+      user: updatedUser,
+      score: updatedUser.score,
+    });
   } else {
     res.status(404).json({ message: "User not found" });
+  }
+});
+
+app.get("/user/:email", async (req, res) => {
+  const email = req.params.email;
+  try {
+    const user = await MinningModel.findOne({ email });
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json("User not found");
+    }
+  } catch (error) {
+    res.status(500).json("Error fetching user data");
   }
 });
 
