@@ -11,11 +11,16 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "*",
+    origin: "*", // This should be fine, but for security, specify only the allowed domains
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
 app.use(cookieParser());
+
+app.options('*', cors()); // Enable preflight request handling
+
 
 const secretKey = "abc@123&567";
 
