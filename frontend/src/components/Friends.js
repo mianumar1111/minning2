@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
-import Cookies from "js-cookie";
 import axios from "axios";
 import "./Friends.css";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Friends = () => {
-  const token = Cookies.get("token");
-  const decoded = jwtDecode(token);
-  const LogedinUser = decoded._doc;
+  const user = JSON.parse(localStorage.getItem('user'));
+  const LogedinUser = user;
   const logedInUserEmail = LogedinUser.email;
   const logedInUserName = LogedinUser.name;
 
   const [friends, setFriends] = useState([]);
   const [loading, setLoading] = useState(true);
+  const url = "https://myproject-pi-ashy.vercel.app";
 
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/getFriends`, {
+        const response = await axios.get(`${url}/getFriends`, {
           params: { email: logedInUserEmail },
         });
         setFriends(response.data);

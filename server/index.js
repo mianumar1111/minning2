@@ -5,24 +5,15 @@ const MinningModel = require("./model/model");
 const session = require("express-session");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const cron = require("node-cron");
 
 const app = express();
 app.use(express.json());
 
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//     credentials: true,
-//   })
-// );
-
-const corsOptions = {
-  origin: "*",
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use(cookieParser());
 
@@ -40,10 +31,10 @@ mongoose
     console.error("Error connecting to MongoDB", err);
   });
 
-const port = 5000;
+var port = process.env.PORT || 5000;
 
 app.get("/", (req, res) => {
-  res.send("abc");
+  res.send("Server is running");
 });
 
 app.get("/getAll", async (req, res) => {
@@ -100,8 +91,6 @@ app.post("/login", (req, res) => {
   MinningModel.findOne({ email: email }).then((user) => {
     if (user) {
       if (user.password === password) {
-        const token = jwt.sign({ ...user }, secretKey, { expiresIn: "1h" });
-        res.cookie("token", token);
         res.json(user);
       } else {
         res.json("Password Incorrect");
@@ -150,31 +139,90 @@ app.put("/addrefer", async (req, res) => {
   }
 });
 
+const activeIntervals = {};
+
+app.post("/approve", async (req, res) => {
+  const { invested, email } = req.body;
+
+  try {
+    const user = await MinningModel.findOne({ email });
+    if (!user) {
+      console.log(`User with email ${email} not found`);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const increment = user.T_invested * 0.0025;
+    console.log(`Calculated increment for user ${email}: ${increment}`);
+
+    if (activeIntervals[email]) {
+      clearInterval(activeIntervals[email]);
+      console.log(`Cleared existing interval for user ${email}`);
+    }
+
+    activeIntervals[email] = setInterval(async () => {
+      try {
+        const result = await MinningModel.updateOne(
+          { email },
+          { $inc: { score: increment } }
+        );
+        console.log(`Updated score for user ${email} by ${increment}`, result);
+      } catch (error) {
+        console.error(`Error updating score for user ${email}:`, error);
+      }
+    }, 12 * 60 * 60 * 1000);
+
+    console.log(`Set interval to update score for user ${email} every second`);
+
+    const resetResult = await MinningModel.updateOne(
+      { email },
+      { $set: { isSubmit: false, order_placed: "No", invested: 0, orderNo: 0 } }
+    );
+    console.log(`Updated user ${email} with reset data`, resetResult);
+
+    res.json({ message: "Plan approved and score updates scheduled" });
+  } catch (error) {
+    console.error("Error in /approve endpoint:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.post("/logout", (req, res) => {
+  const { email } = req.body;
+  res.json({ message: "User logged out" });
+});
+
 app.put("/addOrder", async (req, res) => {
-  const { email, orderNo,plan } = req.body;
+  const { email, orderNo, plan } = req.body;
   try {
     console.log(
       `Received request to update order for email: ${email} with order number: ${orderNo}`
-    ); // Logging the request data
+    );
 
     const updatedUser = await MinningModel.findOneAndUpdate(
       { email: email },
-      { $set: { orderNo: orderNo, isSubmit: true }, $inc: { invested: plan } },
+      {
+        $set: {
+          orderNo: orderNo,
+          isSubmit: true,
+          invested: plan,
+          order_placed: "Yes",
+        },
+        $inc: { T_invested: plan },
+      },
       { new: true }
     );
 
     if (updatedUser) {
-      console.log(`User updated successfully: ${JSON.stringify(updatedUser)}`); // Logging the updated user data
       res.json({
         message: "Order number updated successfully",
         user: updatedUser,
       });
     } else {
-      console.error(`User with email ${email} not found`); // Logging when user is not found
+      console.error(`User with email ${email} not found`);
       res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
-    console.error("Error updating order number:", error); // Logging the error
+    console.error("Error updating order number:", error);
     res.status(500).json("Error updating order number");
   }
 });

@@ -13,7 +13,7 @@ const Navbar = () => {
   
   const handleLogout = async () => {
     navigate("/login");
-    Cookies.remove("token");
+    localStorage.clear('user')
   };
 
   return (

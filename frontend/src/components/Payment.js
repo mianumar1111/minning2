@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
-import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Payment.css";
 import axios from "axios";
 
 const Payment = () => {
-  const token = Cookies.get("token");
-  const decoded = jwtDecode(token);
-  const LogedinUser = decoded._doc;
+  const user = JSON.parse(localStorage.getItem("user"));
+  const LogedinUser = user;
   const email = LogedinUser.email;
   const location = useLocation();
   const { plan } = location.state;
@@ -16,7 +13,8 @@ const Payment = () => {
   const [address, setAddress] = useState("");
   const [orderNo, setOrderNo] = useState("");
   const navigate = useNavigate();
-  const url = "http://localhost:5000";
+  // const url = "http://localhost:5000";
+  const url = "https://myproject-pi-ashy.vercel.app";
 
   useEffect(() => {
     if (method === "Binance") {
@@ -37,10 +35,21 @@ const Payment = () => {
   const handleSubmit = async (e) => {
     if (orderNo === "") {
       alert("Please Enter OrderNo");
+      return; // Add this line to prevent the function from proceeding if orderNo is empty
     }
 
-    const result = await axios.put(`${url}/addOrder`, { email, orderNo, plan });
-    console.log(result);
+    try {
+      const result = await axios.put(`${url}/addOrder`, {
+        email,
+        orderNo,
+        plan,
+        method,
+      });
+      localStorage.setItem("user", JSON.stringify(result.data.user));
+      navigate("/welcome");
+    } catch (error) {
+      console.error("Error submitting order:", error);
+    }
   };
 
   return (

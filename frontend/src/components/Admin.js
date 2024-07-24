@@ -8,8 +8,8 @@ import Cookies from "js-cookie";
 const Admin = () => {
   const navigate = useNavigate();
   const [allUsers, setAllUsers] = useState([]);
-  console.log(allUsers,11)
-  const url = "http://localhost:5000";
+  // const url = "http://localhost:5000";
+  const url = "https://myproject-pi-ashy.vercel.app";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +23,10 @@ const Admin = () => {
 
     fetchData();
   }, []);
+
+  const handleApprove = ()=>{
+    axios.post(`${url}/handleApprove`)
+  }
   return (
     <>
     <button
@@ -45,8 +49,9 @@ const Admin = () => {
             <div>Role: {user.role}</div>
             <div>TotalInvestment: {user.totalInvestment}</div>
             <div>Invested: {user.invested}</div>
+            <div>Exchange: {user.exchange}</div>
             <div>Order No: {user.orderNo}</div>
-            <div>Is Submit: {user.isSubmit ? <button>Approve</button> : 'No'}</div>
+            <div>Is Submit: {user.isSubmit ? <button onClick={handleApprove} >Approve</button> : 'No'}</div>
             <div>
               Referred:
               <ul>
