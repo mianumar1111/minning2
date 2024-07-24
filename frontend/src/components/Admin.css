@@ -1,0 +1,33 @@
+.adminContainer {
+  max-height: 80vh; /* Set maximum height for scrollability */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.userContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.userCard {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+}
+
+.userCard div {
+  margin-bottom: 10px;
+}
+
+.userCard div:last-child {
+  margin-bottom: 0;
+}
+
+.userCard li {
+  margin-left: 20px;
+}

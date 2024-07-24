@@ -1,0 +1,52 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  height: 100vh;
+  background-image: url('./images/background.gif');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow: hidden;
+}
+.name {
+  color: gold;
+}
+
+.logOutBtn {
+  cursor: pointer;
+  width: 100px;
+  height: 40px;
+  border-radius: 30px;
+  border: 1px solid green;
+  font-size: 18px;
+  font-style: italic;
+}
+
+.logOutBtn:hover {
+  width: 105px;
+  font-size: 20px;
+}
+
+.coinImage {
+  border: 1px solid red;
+  border-radius: 100%;
+  width: 200px;
+}
+
+.minBtn {
+  margin: 10px;
+  height: 50px;
+  padding-right: 20px;
+  padding-left: 20px;
+  border-radius: 50px;
+  border: 0;
+  text-align: center;
+  font-size: 20px;
+}
+.minBtn:hover{
+  font-weight: 600;
+  cursor: pointer;
+}
+.welcomeHeading{
+  color: white;
+}

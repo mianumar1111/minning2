@@ -1,0 +1,83 @@
+.container {
+  width: fit-content;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+select {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+option {
+  padding: 10px;
+}
+
+p {
+  font-size: 1.2em;
+  color: #555;
+  margin-top: 20px;
+  word-break: break-all; /* To handle long addresses */
+}
+
+select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.lbl {
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #333;
+  text-align: center;
+}
+
+.inpt {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.orderSubmitBtn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.orderSubmitBtn:hover {
+  background-color: #0056b3;
+}
+
+.back{
+    color: white;
+    text-align: left;
+    padding-left: 20px;
+    cursor: pointer;
+}

@@ -1,0 +1,16 @@
+.navUl{
+border: #007bff solid 1px;
+display: flex;
+justify-content: space-evenly;
+}
+.navLi{
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 300;
+    list-style-type: none;
+    color: white;
+}
+
+.navLi:hover{
+    font-weight: 600;
+}
