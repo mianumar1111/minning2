@@ -17,7 +17,6 @@ function App() {
           <Route path="/payment" element={<Payment  />} />
           <Route path="/admin" element={<Admin/>} />
         </Routes>
-        {/* <>kjszgfzbjk</> */}
       </BrowserRouter>
     </div>
   );
