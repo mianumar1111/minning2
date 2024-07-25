@@ -24,7 +24,7 @@ const Admin = () => {
   }, []);
 
   const handleApprove = () => {
-    axios.post(`${url}/approve`);
+    axios.post(`${url}/approve`,);
   };
 
   return (

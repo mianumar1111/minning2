@@ -150,37 +150,25 @@ app.post("/approve", async (req, res) => {
   try {
     const user = await MinningModel.findOne({ email });
     if (!user) {
-      console.log(`User with email ${email} not found`);
       return res.status(404).json({ message: "User not found" });
     }
-
     const increment = user.T_invested * 0.0025;
-    console.log(`Calculated increment for user ${email}: ${increment}`);
-
     if (activeIntervals[email]) {
       clearInterval(activeIntervals[email]);
-      console.log(`Cleared existing interval for user ${email}`);
     }
-
     activeIntervals[email] = setInterval(async () => {
       try {
-        const result = await MinningModel.updateOne(
-          { email },
-          { $inc: { score: increment } }
-        );
-        console.log(`Updated score for user ${email} by ${increment}`, result);
+        await MinningModel.updateOne({ email }, { $inc: { score: increment } });
+        console.log(`Updated score for user ${email} by ${increment}`);
       } catch (error) {
         console.error(`Error updating score for user ${email}:`, error);
       }
-    }, 12 * 60 * 60 * 1000);
+    }, 1000);
 
-    console.log(`Set interval to update score for user ${email} every second`);
-
-    const resetResult = await MinningModel.updateOne(
+    await MinningModel.updateOne(
       { email },
       { $set: { isSubmit: false, order_placed: "No", invested: 0, orderNo: 0 } }
     );
-    console.log(`Updated user ${email} with reset data`, resetResult);
 
     res.json({ message: "Plan approved and score updates scheduled" });
   } catch (error) {
