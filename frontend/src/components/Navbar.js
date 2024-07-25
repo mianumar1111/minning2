@@ -3,9 +3,7 @@ import Welcome from "./Welcome";
 import Friends from "./Friends";
 import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import Plans from "./Plans";
-import Payment from "./Payment";
 
 const Navbar = () => {
   const [activeState, setActiveState] = useState("home");
