@@ -23,8 +23,8 @@ const Admin = () => {
     fetchData();
   }, []);
 
-  const handleApprove = () => {
-    axios.post(`${url}/approve`,);
+  const handleApprove = (invested, email) => {
+    axios.post(`${url}/approve`,{invested, email});
   };
 
   return (
@@ -54,7 +54,7 @@ const Admin = () => {
               <div>
                 Is Submit:{" "}
                 {user.isSubmit ? (
-                  <button onClick={handleApprove}>Approve</button>
+                  <button onClick={()=>{handleApprove(user.email,user.invested)}}>Approve</button>
                 ) : (
                   "No"
                 )}
