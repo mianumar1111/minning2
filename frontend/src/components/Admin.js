@@ -24,6 +24,8 @@ const Admin = () => {
   }, []);
 
   const handleApprove = (invested, email) => {
+    console.log(email)
+    console.log(invested)
     axios.post(`${url}/approve`,{invested, email});
   };
 
@@ -54,7 +56,7 @@ const Admin = () => {
               <div>
                 Is Submit:{" "}
                 {user.isSubmit ? (
-                  <button onClick={()=>{handleApprove(user.email,user.invested)}}>Approve</button>
+                  <button onClick={handleApprove(user.email,user.invested)}>Approve</button>
                 ) : (
                   "No"
                 )}
