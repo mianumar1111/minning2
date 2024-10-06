@@ -8,7 +8,7 @@ import Plans from "./Plans";
 const Navbar = () => {
   const [activeState, setActiveState] = useState("home");
   const navigate = useNavigate();
-  
+
   const handleLogout = async () => {
     navigate("/login");
     localStorage.clear('user')
@@ -44,6 +44,13 @@ const Navbar = () => {
           </li>
           <li
             className="navLi"
+          >
+            <a href="https://t.me/investoramoney">
+              Join Tel
+            </a>
+          </li>
+          <li
+            className="navLi"
             onClick={() => {
               handleLogout();
             }}
@@ -52,7 +59,7 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-      {activeState === "home" ? <Welcome /> : activeState==='friends'? <Friends />:activeState==='Investments'? <Plans/>:null}
+      {activeState === "home" ? <Welcome /> : activeState === 'friends' ? <Friends /> : activeState === 'Investments' ? <Plans /> : null}
     </>
   );
 };
