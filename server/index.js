@@ -24,8 +24,7 @@ const secretKey = "abc@123&567";
 
 mongoose
   .connect(
-    // "mongodb+srv://mianumar1111:1234%405678@project1.bppcdpc.mongodb.net/minningdata",
-    "mongodb+srv://investora:investora@investora.r3jym.mongodb.net/investora",
+    "mongodb+srv://mianumar1111:1234%405678@project1.bppcdpc.mongodb.net/minningdata",
     {}
   )
   .then(() => {
